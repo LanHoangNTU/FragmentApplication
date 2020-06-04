@@ -1,9 +1,9 @@
 package vn.edu.ntu.nguyendinhhoanglan.model;
 
 public class Product {
-    String name;
-    int price;
-    String description;
+    protected String name;
+    protected int price;
+    protected String description;
 
     public Product(String name, int price, String description) {
         this.name = name;

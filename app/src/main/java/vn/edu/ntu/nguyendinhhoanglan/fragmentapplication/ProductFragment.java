@@ -19,8 +19,11 @@ import android.widget.Toast;
 import java.util.List;
 
 import vn.edu.ntu.nguyendinhhoanglan.controller.ICartController;
+import vn.edu.ntu.nguyendinhhoanglan.dialog.IConfirmData;
+import vn.edu.ntu.nguyendinhhoanglan.dialog.MyDialog;
+import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
 import vn.edu.ntu.nguyendinhhoanglan.model.Product;
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements IConfirmData {
     EditText edtName, edtPrice, edtDes;
     FragmentActivity activity;
     NavController controller;
@@ -53,34 +56,56 @@ public class ProductFragment extends Fragment {
         view.findViewById(R.id.btnCheck).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addProducts();
+                MyDialog dialog = new MyDialog(ProductFragment.this);
+                dialog.show(getActivity().getSupportFragmentManager(), "dialog");
             }
         });
     }
 
-    private void addProducts(){
-        if(edtName.getText().toString().length() > 0 && edtPrice.getText().toString().length() > 0) {
-            String name = edtName.getText().toString();
-            int price = Integer.parseInt(edtPrice.getText().toString());
-            String des = edtDes.getText().toString();
-            Product p = new Product(name, price, des);
-
-            ICartController controller = (ICartController) getActivity().getApplication();
-            boolean boo = controller.addProduct(p);
-            if (boo)
-                Toast.makeText(getActivity(), "Added!", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(getActivity(), "Already existed", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getActivity(), "Name or Price is invalid", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void addProducts(){
+//        if(edtName.getText().toString().length() > 0 && edtPrice.getText().toString().length() > 0) {
+//            String name = edtName.getText().toString();
+//            int price = Integer.parseInt(edtPrice.getText().toString());
+//            String des = edtDes.getText().toString();
+//            CartDetail p = new CartDetail(name, price, des);
+//
+//            ICartController controller = (ICartController) getActivity().getApplication();
+//            boolean boo = controller.addProduct(p);
+//            if (boo)
+//                Toast.makeText(getActivity(), "Added!", Toast.LENGTH_SHORT).show();
+//            else
+//                Toast.makeText(getActivity(), "Already existed", Toast.LENGTH_SHORT).show();
+//        }
+//        else{
+//            Toast.makeText(getActivity(), "Name or Price is invalid", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void addViews() {
         FragmentActivity _act = getActivity();
         edtName = _act.findViewById(R.id.edtName);
         edtPrice = _act.findViewById(R.id.edtPrice);
         edtDes = _act.findViewById(R.id.edtDescription);
+    }
+
+    @Override
+    public void confirm(boolean confirm) {
+        if(confirm) {
+            if (edtName.getText().toString().length() > 0 && edtPrice.getText().toString().length() > 0) {
+                String name = edtName.getText().toString();
+                int price = Integer.parseInt(edtPrice.getText().toString());
+                String des = edtDes.getText().toString();
+                CartDetail p = new CartDetail(name, price, des);
+
+                ICartController controller = (ICartController) getActivity().getApplication();
+                boolean boo = controller.addProduct(p);
+                if (boo)
+                    Toast.makeText(getActivity(), "Added!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getActivity(), "Already existed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Name or Price is invalid", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

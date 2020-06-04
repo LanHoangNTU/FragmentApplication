@@ -31,7 +31,13 @@
         android:id="@+id/confirmFragment"
         android:name="vn.edu.ntu.nguyendinhhoanglan.fragmentapplication.ConfirmFragment"
         android:label="fragment_confirm"
-        tools:layout="@layout/fragment_confirm" />
+        tools:layout="@layout/fragment_confirm" >
+        <action
+            android:id="@+id/action_confirmFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment"
+            app:popUpTo="@id/FirstFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/productFragment"
         android:name="vn.edu.ntu.nguyendinhhoanglan.fragmentapplication.ProductFragment"

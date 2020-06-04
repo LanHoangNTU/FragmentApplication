@@ -21,13 +21,15 @@ import java.util.List;
 import java.util.Locale;
 
 import vn.edu.ntu.nguyendinhhoanglan.controller.ICartController;
+import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
 import vn.edu.ntu.nguyendinhhoanglan.model.Product;
 
 public class FirstFragment extends Fragment {
     NavController controller;
     RecyclerView rvListProduct;
     ProductAdapter adapter;
-    List<Product> listProducts;
+    List<CartDetail> listProducts;
+    ImageView imvCart;
 
     @Override
     public View onCreateView(
@@ -67,12 +69,21 @@ public class FirstFragment extends Fragment {
         listProducts = cartController.getAllProducts();
         adapter = new ProductAdapter(listProducts);
         rvListProduct.setAdapter(adapter);
+
+        imvCart = activity.findViewById(R.id.imvMyCart);
+        imvCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(FirstFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+            }
+        });
     }
 
     private class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView txtName, txtPrice, txtDescription;
         ImageView imvAddToCart;
-        Product p;
+        CartDetail p;
         private ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = this.itemView.findViewById(R.id.txtPName);
@@ -82,7 +93,7 @@ public class FirstFragment extends Fragment {
             imvAddToCart.setOnClickListener(this);
         }
 
-        private void bind(Product p){
+        private void bind(CartDetail p){
             this.p = p;
             txtName.setText(p.getName());
             txtPrice.setText(String.format(Locale.ENGLISH, "%d", p.getPrice()));
@@ -108,9 +119,9 @@ public class FirstFragment extends Fragment {
     }
 
     private class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder>{
-        List<Product> listProduct;
+        List<CartDetail> listProduct;
 
-        private ProductAdapter(List<Product> listProduct) {
+        private ProductAdapter(List<CartDetail> listProduct) {
             this.listProduct = listProduct;
         }
 

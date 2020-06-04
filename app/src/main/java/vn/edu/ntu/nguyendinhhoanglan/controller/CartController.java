@@ -5,22 +5,23 @@ import android.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
 import vn.edu.ntu.nguyendinhhoanglan.model.Product;
 
 public class CartController extends Application implements ICartController {
-    List<Product> listProducts = new ArrayList<>();
-    List<Product> shoppingCart = new ArrayList<>();
+    List<CartDetail> listProducts = new ArrayList<>();
+    List<CartDetail> shoppingCart = new ArrayList<>();
 
     public CartController() {
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<CartDetail> getAllProducts() {
         return listProducts;
     }
 
     @Override
-    public boolean addToCart(Product product) {
+    public boolean addToCart(CartDetail product) {
         if(this.shoppingCart.contains(product))
             return false;
         this.shoppingCart.add(product);
@@ -28,7 +29,7 @@ public class CartController extends Application implements ICartController {
     }
 
     @Override
-    public List<Product> getShoppingCart() {
+    public List<CartDetail> getShoppingCart() {
         return this.shoppingCart;
     }
 
@@ -38,7 +39,7 @@ public class CartController extends Application implements ICartController {
     }
 
     @Override
-    public boolean addProduct(Product product) {
+    public boolean addProduct(CartDetail product) {
         for (Product p:
              listProducts) {
             if(p.getName().equals(product.getName()))
@@ -46,5 +47,15 @@ public class CartController extends Application implements ICartController {
         }
         listProducts.add(product);
         return true;
+    }
+
+    @Override
+    public long getTotalPrice() {
+        long sum = 0;
+        for (CartDetail p:
+             shoppingCart) {
+            sum += p.calculatePrice();
+        }
+        return sum;
     }
 }
