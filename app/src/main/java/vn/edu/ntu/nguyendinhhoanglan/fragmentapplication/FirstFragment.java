@@ -109,11 +109,11 @@ public class FirstFragment extends Fragment {
         public void onClick(View v) {
             ICartController controller = (ICartController) getActivity().getApplication();
             if(controller.addToCart(p)) {
-                Toast.makeText(getActivity(), "Added " + p.getName() + " into shopping cart",
+                Toast.makeText(getActivity(), "Added '" + p.getName() + "' into shopping cart",
                         Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(getActivity(), p.getName() + " already exist in your shopping cart",
+                Toast.makeText(getActivity(), "Added one more '" + p.getName() + "' into shopping cart",
                         Toast.LENGTH_SHORT).show();
         }
     }

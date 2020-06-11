@@ -7,15 +7,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import vn.edu.ntu.nguyendinhhoanglan.controller.ICartController;
+import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
+import vn.edu.ntu.nguyendinhhoanglan.model.Product;
+
 public class SecondFragment extends Fragment {
-    TextView txtN, txtP;
+    TextView txtN, txtP, txtTP;
     ImageView imvRemove;
     int length;
+    //List<CartDetail> products;
 
     @Override
     public View onCreateView(
@@ -32,8 +41,14 @@ public class SecondFragment extends Fragment {
         view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_confirmFragment);
+                int i = ((ICartController) getActivity().getApplication()).getShoppingCart().size();
+                if(i > 0) {
+                    NavHostFragment.findNavController(SecondFragment.this)
+                            .navigate(R.id.action_SecondFragment_to_confirmFragment);
+                }
+                else{
+                    Toast.makeText(getActivity().getApplication(), "Cart is empty", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -43,13 +58,34 @@ public class SecondFragment extends Fragment {
     private void addViews() {
         txtN = getActivity().findViewById(R.id.txtNames);
         txtP = getActivity().findViewById(R.id.txtPrices);
+        txtTP = getActivity().findViewById(R.id.txtTotal);
         imvRemove = getActivity().findViewById(R.id.imvRemove);
+
         imvRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((ICartController) getActivity().getApplication()).clearShoppingCart();
+                txtTP.setText("Total price: 0");
                 txtN.setText("Cart is empty.");
                 txtP.setText("");
             }
         });
+
+        initShoppingCart();
+    }
+
+    private void initShoppingCart(){
+        List<CartDetail> products;
+        String names = "";
+        String prices = "";
+        products = ((ICartController) getActivity().getApplication()).getShoppingCart();
+        for (CartDetail p:
+             products) {
+            names += p.getName() + " x " + p.getAmount() + "\n";
+            prices += p.calculatePrice() + "\n";
+        }
+        txtN.setText(names);
+        txtP.setText(prices);
+        txtTP.setText("Total price: " + ((ICartController) getActivity().getApplication()).getTotalPrice());
     }
 }

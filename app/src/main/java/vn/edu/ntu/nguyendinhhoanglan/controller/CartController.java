@@ -22,8 +22,10 @@ public class CartController extends Application implements ICartController {
 
     @Override
     public boolean addToCart(CartDetail product) {
-        if(this.shoppingCart.contains(product))
+        if(this.shoppingCart.contains(product)) {
+            product.addOne();
             return false;
+        }
         this.shoppingCart.add(product);
         return true;
     }

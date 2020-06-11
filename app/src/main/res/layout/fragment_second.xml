@@ -2,18 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/no"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".SecondFragment">
-
-    <ImageView
-        android:id="@+id/imvRemove"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="end"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_action_remove_cart" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,33 +17,47 @@
             android:id="@+id/txtNames"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_weight="2"/>
+            android:layout_weight="2"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/txtPrices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="16sp"
-            android:text="" />
+            android:text=""
+            android:textSize="16sp" />
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txtTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2" />
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_second"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="buy" />
+            android:text="buy"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/imvRemove"
+            android:layout_width="92dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_action_remove_cart" />
 
     </LinearLayout>
 
