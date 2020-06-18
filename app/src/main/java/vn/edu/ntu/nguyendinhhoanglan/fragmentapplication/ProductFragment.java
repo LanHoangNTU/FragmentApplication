@@ -1,6 +1,7 @@
 package vn.edu.ntu.nguyendinhhoanglan.fragmentapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import vn.edu.ntu.nguyendinhhoanglan.controller.ICartController;
 import vn.edu.ntu.nguyendinhhoanglan.dialog.IConfirmData;
@@ -25,8 +28,9 @@ import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
 import vn.edu.ntu.nguyendinhhoanglan.model.Product;
 public class ProductFragment extends Fragment implements IConfirmData {
     EditText edtName, edtPrice, edtDes;
-    FragmentActivity activity;
+    ICartController cartController;
     NavController controller;
+    Set<String> mySet = new HashSet<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,10 +86,14 @@ public class ProductFragment extends Fragment implements IConfirmData {
 //    }
 
     private void addViews() {
+        cartController = ((MainActivity) getActivity()).cartController;
         FragmentActivity _act = getActivity();
         edtName = _act.findViewById(R.id.edtName);
         edtPrice = _act.findViewById(R.id.edtPrice);
         edtDes = _act.findViewById(R.id.edtDescription);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MainActivity.productListName, Context.MODE_PRIVATE);
+        this.mySet = sharedPreferences.getStringSet(MainActivity.keyAll, new HashSet<String>());
     }
 
     @Override
@@ -96,11 +104,13 @@ public class ProductFragment extends Fragment implements IConfirmData {
                 int price = Integer.parseInt(edtPrice.getText().toString());
                 String des = edtDes.getText().toString();
                 CartDetail p = new CartDetail(name, price, des);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MainActivity.productListName, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                ICartController controller = (ICartController) getActivity().getApplication();
-                boolean boo = controller.addProduct(p);
-                if (boo)
+                boolean boo = cartController.addProduct(p);
+                if (boo) {
                     Toast.makeText(getActivity(), "Added!", Toast.LENGTH_SHORT).show();
+                }
                 else
                     Toast.makeText(getActivity(), "Already existed", Toast.LENGTH_SHORT).show();
             } else {

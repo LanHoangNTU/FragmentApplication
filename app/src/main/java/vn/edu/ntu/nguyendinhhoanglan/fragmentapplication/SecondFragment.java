@@ -1,5 +1,7 @@
 package vn.edu.ntu.nguyendinhhoanglan.fragmentapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import vn.edu.ntu.nguyendinhhoanglan.controller.ICartController;
 import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
@@ -23,7 +27,7 @@ import vn.edu.ntu.nguyendinhhoanglan.model.Product;
 public class SecondFragment extends Fragment {
     TextView txtN, txtP, txtTP;
     ImageView imvRemove;
-    int length;
+    ICartController cartController;
     //List<CartDetail> products;
 
     @Override
@@ -38,10 +42,11 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        cartController = ((MainActivity) getActivity()).cartController;
         view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int i = ((ICartController) getActivity().getApplication()).getShoppingCart().size();
+                int i = cartController.getShoppingCart().size();
                 if(i > 0) {
                     NavHostFragment.findNavController(SecondFragment.this)
                             .navigate(R.id.action_SecondFragment_to_confirmFragment);
@@ -78,7 +83,7 @@ public class SecondFragment extends Fragment {
         List<CartDetail> products;
         String names = "";
         String prices = "";
-        products = ((ICartController) getActivity().getApplication()).getShoppingCart();
+        products = cartController.getShoppingCart();
         for (CartDetail p:
              products) {
             names += p.getName() + " x " + p.getAmount() + "\n";
@@ -86,6 +91,6 @@ public class SecondFragment extends Fragment {
         }
         txtN.setText(names);
         txtP.setText(prices);
-        txtTP.setText("Total price: " + ((ICartController) getActivity().getApplication()).getTotalPrice());
+        txtTP.setText("Total price: " + cartController.getTotalPrice());
     }
 }

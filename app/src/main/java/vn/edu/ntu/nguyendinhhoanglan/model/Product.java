@@ -1,7 +1,13 @@
 package vn.edu.ntu.nguyendinhhoanglan.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+
+@Entity(tableName = "Product")
 public class Product {
+    @NonNull
     protected String name;
+    @NonNull
     protected int price;
     protected String description;
 
@@ -33,5 +39,10 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + "<>" + this.price + "<>" + this.description;
     }
 }

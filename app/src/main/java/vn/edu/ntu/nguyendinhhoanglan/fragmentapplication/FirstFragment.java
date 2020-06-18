@@ -1,6 +1,7 @@
 package vn.edu.ntu.nguyendinhhoanglan.fragmentapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
@@ -17,8 +19,11 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import vn.edu.ntu.nguyendinhhoanglan.controller.ICartController;
 import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
@@ -30,6 +35,7 @@ public class FirstFragment extends Fragment {
     ProductAdapter adapter;
     List<CartDetail> listProducts;
     ImageView imvCart;
+    ICartController cartController;
 
     @Override
     public View onCreateView(
@@ -62,10 +68,10 @@ public class FirstFragment extends Fragment {
     }
 
     private void addViews() {
+        cartController = ((MainActivity) getActivity()).cartController;
         FragmentActivity activity = getActivity();
         rvListProduct = activity.findViewById(R.id.rvProducts);
         rvListProduct.setLayoutManager(new LinearLayoutManager(activity));
-        ICartController cartController = (ICartController) activity.getApplication();
         listProducts = cartController.getAllProducts();
         adapter = new ProductAdapter(listProducts);
         rvListProduct.setAdapter(adapter);
@@ -107,8 +113,7 @@ public class FirstFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            ICartController controller = (ICartController) getActivity().getApplication();
-            if(controller.addToCart(p)) {
+            if(cartController.addToCart(p)) {
                 Toast.makeText(getActivity(), "Added '" + p.getName() + "' into shopping cart",
                         Toast.LENGTH_SHORT).show();
             }

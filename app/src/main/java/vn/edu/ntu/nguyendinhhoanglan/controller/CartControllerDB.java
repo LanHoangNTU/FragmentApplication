@@ -1,23 +1,33 @@
 package vn.edu.ntu.nguyendinhhoanglan.controller;
 
-import android.app.Application;
+import android.content.Context;
+
+import androidx.room.Room;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.edu.ntu.nguyendinhhoanglan.model.AppDatabase;
 import vn.edu.ntu.nguyendinhhoanglan.model.CartDetail;
-import vn.edu.ntu.nguyendinhhoanglan.model.Product;
+import vn.edu.ntu.nguyendinhhoanglan.model.DAOProduct;
 
-public class CartController extends Application implements ICartController {
-    List<CartDetail> listProducts = new ArrayList<>();
+public class CartControllerDB implements ICartController{
+
     List<CartDetail> shoppingCart = new ArrayList<>();
+    AppDatabase database;
+    DAOProduct daoProduct;
 
-    public CartController() {
+    public CartControllerDB(Context context) {
+        database = Room.databaseBuilder(context, AppDatabase.class,
+                                        "landb")
+                                        .allowMainThreadQueries()
+                                        .build();
+        daoProduct = database.getProductDAO();
     }
 
     @Override
     public List<CartDetail> getAllProducts() {
-        return listProducts;
+        return daoProduct.getListProduct();
     }
 
     @Override
@@ -42,7 +52,7 @@ public class CartController extends Application implements ICartController {
 
     @Override
     public void setAllProducts(List<CartDetail> products) {
-        this.listProducts = products;
+
     }
 
     @Override
@@ -52,12 +62,9 @@ public class CartController extends Application implements ICartController {
 
     @Override
     public boolean addProduct(CartDetail product) {
-        for (CartDetail p:
-             listProducts) {
-            if(p.getName().equals(product.getName()))
-                return false;
-        }
-        listProducts.add(product);
+        if(daoProduct.getListProduct().contains(product))
+            return false;
+        daoProduct.insertProduct(product);
         return true;
     }
 
@@ -65,7 +72,7 @@ public class CartController extends Application implements ICartController {
     public long getTotalPrice() {
         long sum = 0;
         for (CartDetail p:
-             shoppingCart) {
+                shoppingCart) {
             sum += p.calculatePrice();
         }
         return sum;

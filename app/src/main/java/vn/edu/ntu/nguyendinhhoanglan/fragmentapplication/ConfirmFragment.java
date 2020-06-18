@@ -17,6 +17,8 @@ import vn.edu.ntu.nguyendinhhoanglan.controller.ICartController;
 
 public class ConfirmFragment extends Fragment {
 
+    ICartController cartController;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +35,11 @@ public class ConfirmFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        cartController = ((MainActivity) getActivity()).cartController;
         view.findViewById(R.id.btnConfirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ICartController) getActivity().getApplication()).clearShoppingCart();
+                cartController.clearShoppingCart();
                 Toast.makeText(getActivity().getApplication(), "Thank you for your purchases", Toast.LENGTH_SHORT).show();
                 NavHostFragment.findNavController(ConfirmFragment.this)
                         .navigate(R.id.action_confirmFragment_to_FirstFragment);
